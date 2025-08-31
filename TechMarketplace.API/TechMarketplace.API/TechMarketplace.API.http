@@ -1,0 +1,6 @@
+@TechMarketplace.API_HostAddress = http://localhost:5043
+
+GET {{TechMarketplace.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
