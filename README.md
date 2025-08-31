@@ -1,6 +1,6 @@
 TechMarketplace Backend
 🎓 STEP IT Academy - სადიპლომო პროექტი
-Student: [თქვენი სახელი გვარი]
+Student: [Onise Tsotskhalashvili]
 Course: Full Stack Development
 Year: 2025
 Institution: STEP IT Academy Georgia
