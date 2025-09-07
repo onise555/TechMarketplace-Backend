@@ -22,12 +22,16 @@ namespace TechMarketplace.API.Models.Users
         public string Password { get; set; }
 
         public string? VerifyCode { get; set; } 
+
         public bool IsVerified { get; set; } = false;
+
+        public bool IsActive { get; set; } = true;
 
         public DateTime? VerifyCodeExpiresAt { get; set; }
 
         public UserDetail UserDetail { get; set; }
         
+   
         public Cart Cart { get; set; }
 
         public List<Address> AddressList { get; set; }  = new List<Address>();

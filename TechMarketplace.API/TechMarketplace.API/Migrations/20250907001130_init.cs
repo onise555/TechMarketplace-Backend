@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TechMarketplace.API.Migrations
 {
     /// <inheritdoc />
-    public partial class INIT : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,6 +55,7 @@ namespace TechMarketplace.API.Migrations
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VerifyCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsVerified = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     VerifyCodeExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -434,6 +435,11 @@ namespace TechMarketplace.API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "FirstName", "IsActive", "IsVerified", "LastName", "Password", "Role", "VerifyCode", "VerifyCodeExpiresAt" },
+                values: new object[] { 1, "admin@system.com", "SuperAdmin", true, true, "AD", "$2a$11$O6O0aYGBieKz68Z3tvOyuO8U.0t4MKfXWn/vHIX3SJBoJzyhHVnUC", 0, "0000", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_UserId",

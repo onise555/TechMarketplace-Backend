@@ -463,6 +463,9 @@ namespace TechMarketplace.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
 
@@ -486,6 +489,20 @@ namespace TechMarketplace.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@system.com",
+                            FirstName = "SuperAdmin",
+                            IsActive = true,
+                            IsVerified = true,
+                            LastName = "AD",
+                            Password = "$2a$11$O6O0aYGBieKz68Z3tvOyuO8U.0t4MKfXWn/vHIX3SJBoJzyhHVnUC",
+                            Role = 0,
+                            VerifyCode = "0000"
+                        });
                 });
 
             modelBuilder.Entity("TechMarketplace.API.Models.Users.UserDetail", b =>

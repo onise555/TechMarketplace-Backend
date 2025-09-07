@@ -36,26 +36,37 @@ namespace TechMarketplace.API.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TechMarketBases;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TechMarket;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
         }
 
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Order-Address relationship - NO CASCADE!
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Address)
-                .WithMany() // Address-ს Orders collection არ ჭირდება
+                .WithMany() 
                 .HasForeignKey(o => o.AddressId)
-                .OnDelete(DeleteBehavior.Restrict); // ✅ მთავარია!
+                .OnDelete(DeleteBehavior.Restrict); 
 
-            // User-Order relationship - NO CASCADE!  
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.User)
                 .WithMany(u => u.orders)
                 .HasForeignKey(o => o.UserId)
-                .OnDelete(DeleteBehavior.Restrict); // ✅ მთავარია!
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //SeedAdmin
+         
+
+                DbSeeder.Seed(modelBuilder);
+
         }
 
+
+       
     }
+
+
 }
