@@ -17,15 +17,15 @@ namespace TechMarketplace.API.Models.Products
         public string Model { get; set; }
         public string Sku { get; set; }
 
+
+        public int BrandId { get; set; }
+
+        public Brand Brand { get; set; }
         public ProductDetail ProductDetail { get; set; }    
 
         public int SubCategoryId { get; set; }  
 
         public SubCategory SubCategory { get; set; }
-
-        public int BrandId { get; set; }    
-
-        public Brand Brand { get; set; }
 
         public List<WishListItem> WishListItems { get; set; } = new List<WishListItem>();
 

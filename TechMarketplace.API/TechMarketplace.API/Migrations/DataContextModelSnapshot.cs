@@ -494,12 +494,12 @@ namespace TechMarketplace.API.Migrations
                         new
                         {
                             Id = 1,
-                            Email = "admin@system.com",
+                            Email = "tsotskhalashvili555@gmail.com",
                             FirstName = "SuperAdmin",
                             IsActive = true,
                             IsVerified = true,
                             LastName = "AD",
-                            Password = "$2a$11$O6O0aYGBieKz68Z3tvOyuO8U.0t4MKfXWn/vHIX3SJBoJzyhHVnUC",
+                            Password = "$2a$11$7u/12jam3NpkZEDzRtbLuOrmfryQ02oRae1P23z.JoAEOYJiCUCpG",
                             Role = 0,
                             VerifyCode = "0000"
                         });
@@ -512,9 +512,6 @@ namespace TechMarketplace.API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -535,6 +532,16 @@ namespace TechMarketplace.API.Migrations
                         .IsUnique();
 
                     b.ToTable("UserDetails");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DateOfBirth = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PhoneNumber = "+995000000000",
+                            UserId = 1,
+                            UserProfileImg = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlzjx4EzLW5lpMnk8NHtGbVV57e0whP0aHr5mE7zUUJjiLSVeofAWZQCM&s"
+                        });
                 });
 
             modelBuilder.Entity("TechMarketplace.API.Models.WishLists.WishList", b =>

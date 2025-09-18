@@ -13,7 +13,8 @@ namespace TechMarketplace.API.Models.Orders
 
         public int AddressId { get; set; }
 
-        public Address Address { get; set; }        
+        public Address Address { get; set; }    
+        
         public decimal TotalAmount { get; set; }
 
         public OrderStatus Status { get; set; }

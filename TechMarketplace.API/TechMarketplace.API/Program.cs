@@ -1,6 +1,8 @@
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 using TechMarketplace.API.Data;
 using TechMarketplace.API.Services;
@@ -53,6 +55,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
+
 //Jwt Token
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
@@ -87,23 +91,39 @@ builder.Services.AddCors(option =>
     });
 });
 
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
+
+// თუ კონკრეტულად uploads ფოლდერი გინდა
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "wwwroot/uploads")),
+    RequestPath = "/uploads"
+});
+
+
+
 app.UseCors();
+app.UseStaticFiles(); // ეს აუცილებელია wwwroot-ისთვის
+
+
 
 app.UseAuthentication();    
 
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 app.Run();

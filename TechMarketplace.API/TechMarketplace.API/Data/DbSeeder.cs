@@ -15,16 +15,28 @@ namespace TechMarketplace.API.Data
                 {
                     Id = 1,
                     FirstName = "SuperAdmin",
-                    LastName ="AD",
-                    Email = "admin@system.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("Admin@123"), // ძლიერი პაროლი
+                    LastName = "AD",
+                    Email = "tsotskhalashvili555@gmail.com",
+                    Password = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
                     Role = UserRole.Admin,
                     IsVerified = true,
                     VerifyCode = "0000",
                     IsActive = true,
-                     
+                }
+            );
+
+            // Admin Detail
+            modelBuilder.Entity<UserDetail>().HasData(
+                new UserDetail
+                {
+                    Id = 1,
+                    UserId = 1,
+                    PhoneNumber = "+995000000000",
+                    UserProfileImg = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlzjx4EzLW5lpMnk8NHtGbVV57e0whP0aHr5mE7zUUJjiLSVeofAWZQCM&s",
+                    DateOfBirth = new DateTime(2000, 1, 1)
                 }
             );
         }
+
     }
 }

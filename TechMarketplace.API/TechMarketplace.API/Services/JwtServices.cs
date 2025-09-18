@@ -22,10 +22,10 @@ namespace TechMarketplace.API.Services
             var creds = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, username),
-        new Claim(ClaimTypes.NameIdentifier, userId.ToString())
-    };
+             {
+             new Claim(ClaimTypes.Name, username),
+             new Claim(ClaimTypes.NameIdentifier, userId.ToString())
+             };
 
             claims.AddRange(role.Select(x => new Claim(ClaimTypes.Role, x.ToString())));
 
