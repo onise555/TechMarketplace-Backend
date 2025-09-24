@@ -11,8 +11,9 @@ using System.Net;
 using System.Security.Claims;
 using TechMarketplace.API.Data;
 using TechMarketplace.API.Dtos.User;
+using TechMarketplace.API.Dtos.User.AddressDtos;
 using TechMarketplace.API.Models.Users;
-using TechMarketplace.API.Requests.User;
+using TechMarketplace.API.Requests.User.AddressRequests;
 using TechMarketplace.API.Services;
 using TechMarketplace.API.SMTP;
 using TechMarketplace.API.Validators.User;
@@ -134,7 +135,7 @@ namespace TechMarketplace.API.Controllers.User
             _data.SaveChanges();
 
 
-            var addressDto = new UpdateUserAddressDto
+            var addressDto = new 
             {
                 Id = address.Id,
                 Country = address.Country,

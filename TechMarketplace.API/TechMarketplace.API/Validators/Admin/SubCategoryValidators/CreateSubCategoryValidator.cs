@@ -25,14 +25,14 @@ namespace TechMarketplace.API.Validators.Admin.SubCategoryValidators
 
             RuleFor(p => p.CategoryId)
            .Must(ExistCategory)
-           .WithMessage("SubCategory does not exist");
+           .WithMessage("Category does not exist");
         }
 
 
 
-        private bool ExistCategory(int CategoryId)
+        private bool ExistCategory(int categoryId)
         {
-            return _data.SubCategories.Any(x=>x.Id == CategoryId);
+            return _data.Categories.Any(x => x.Id == categoryId);
         }
     }
 }

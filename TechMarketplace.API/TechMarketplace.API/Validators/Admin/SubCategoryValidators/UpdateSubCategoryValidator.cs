@@ -1,0 +1,36 @@
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TechMarketplace.API.Data;
+using TechMarketplace.API.Requests.Admin.AdminSubCategoryRequest;
+
+namespace TechMarketplace.API.Validators.Admin.SubCategoryValidators
+{
+    public class UpdateSubCategoryValidator:AbstractValidator<UpdateSubCategoryRequest>
+    {
+        private readonly DataContext _data;
+
+        public UpdateSubCategoryValidator(DataContext data)
+        {
+            _data = data;
+
+
+            RuleFor(x => x.Name)
+                .NotEmpty().WithMessage("Name is required.")
+                .MaximumLength(100).WithMessage("Name cannot exceed 100 characters.");
+
+            RuleFor(x => x.Description)
+                .NotEmpty().WithMessage("Description is required.")
+                .MaximumLength(500).WithMessage("Description cannot exceed 500 characters.");
+
+            RuleFor(p => p.CategoryId)
+                   .Must(ExistCategory)
+                   .WithMessage("Category does not exist");
+        }
+
+
+        private bool ExistCategory(int categoryId)
+        {
+            return _data.Categories.Any(x => x.Id == categoryId);
+        }
+    }
+}

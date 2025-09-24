@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using TechMarketplace.API.Data;
-using TechMarketplace.API.Requests.User;
 using TechMarketplace.API.Services;
 using TechMarketplace.API.Models.Users;
 using TechMarketplace.API.Models.Users;
 using UserEntity = TechMarketplace.API.Models.Users.User;
 using TechMarketplace.API.SMTP;
+using TechMarketplace.API.Requests.User.AuthRequests;
 namespace TechMarketplace.API.Controllers.Auth
 {
     [Route("api/[controller]")]

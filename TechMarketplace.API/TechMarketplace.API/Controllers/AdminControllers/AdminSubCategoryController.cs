@@ -13,7 +13,7 @@ namespace TechMarketplace.API.Controllers.AdminControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles ="Admin")]
     public class AdminSubCategoryController : ControllerBase
     {
 
@@ -37,7 +37,7 @@ namespace TechMarketplace.API.Controllers.AdminControllers
             {
                 Name = request.Name,
                 Description = request.Description,
-                CategoryId = request.CategoryId,
+                CategoryId = request.CategoryId ,
             };
             _data.SubCategories.Add(subc);
             _data.SaveChanges();

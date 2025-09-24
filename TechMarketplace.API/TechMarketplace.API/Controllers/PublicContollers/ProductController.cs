@@ -37,8 +37,8 @@ namespace TechMarketplace.API.Controllers.PublicContollers
                 ProductImgUrl=x.ProductImgUrl,
                 CreatedAt=x.CreatedAt,
                 Model= x.Model,
-                Price= x.Price,  
-                Sku= x.Sku,
+                Price= x.Price,
+                Sku = x.Sku,
                 Status = x.ProductDetail.Stock > 0
                         ? ProductStatus.Active
                         : ProductStatus.OutOfStock

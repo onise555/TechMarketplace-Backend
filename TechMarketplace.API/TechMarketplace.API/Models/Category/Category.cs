@@ -8,7 +8,7 @@
 
         public string CateogryImgUrl { get; set; }  
 
-        public List<SubCategory> SubCategories { get; set; }
+        public List<SubCategory> SubCategories { get; set; } =new List<SubCategory>();
 
 
     }

@@ -10,6 +10,7 @@ namespace TechMarketplace.API.Models.Products
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
         public ProductStatus Status { get; set; }
         public string ProductImgUrl { get; set; }
         public decimal Price { get; set; }

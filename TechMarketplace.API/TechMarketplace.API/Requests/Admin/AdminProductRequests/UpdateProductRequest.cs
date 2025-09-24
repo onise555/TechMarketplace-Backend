@@ -7,6 +7,7 @@
         public IFormFile? File { get; set; }
         public DateTime CreatedAt { get; set; }
         public decimal Price { get; set; }
+
         public string Model { get; set; }
         public string Sku { get; set; }
 

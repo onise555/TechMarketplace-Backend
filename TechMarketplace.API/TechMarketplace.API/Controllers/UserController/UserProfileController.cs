@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TechMarketplace.API.Data;
-using TechMarketplace.API.Dtos.User;
-using TechMarketplace.API.Requests.User;
+using TechMarketplace.API.Dtos.Admin.AdminUserDtos;
+using TechMarketplace.API.Dtos.User.ProfileDtos;
+using TechMarketplace.API.Requests.User.AuthRequests;
 using TechMarketplace.API.Services;
 using TechMarketplace.API.SMTP;
 

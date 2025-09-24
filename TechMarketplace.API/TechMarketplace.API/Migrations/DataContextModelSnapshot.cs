@@ -245,6 +245,9 @@ namespace TechMarketplace.API.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
@@ -360,7 +363,7 @@ namespace TechMarketplace.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductDetailId")
+                    b.Property<int>("SpecificationCategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Value")
@@ -369,9 +372,31 @@ namespace TechMarketplace.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductDetailId");
+                    b.HasIndex("SpecificationCategoryId");
 
-                    b.ToTable("ProductSpecifications");
+                    b.ToTable("ProductSpecification");
+                });
+
+            modelBuilder.Entity("TechMarketplace.API.Models.Products.SpecificationCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("productDetailid")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("productDetailid");
+
+                    b.ToTable("SpecificationCategories");
                 });
 
             modelBuilder.Entity("TechMarketplace.API.Models.Reviews.Review", b =>
@@ -499,7 +524,7 @@ namespace TechMarketplace.API.Migrations
                             IsActive = true,
                             IsVerified = true,
                             LastName = "AD",
-                            Password = "$2a$11$7u/12jam3NpkZEDzRtbLuOrmfryQ02oRae1P23z.JoAEOYJiCUCpG",
+                            Password = "$2a$11$4NvKTrHQXv6JhVzyapf75eeKWqBK5DWsp81chZkYSwIHyACRh6gLy",
                             Role = 0,
                             VerifyCode = "0000"
                         });
@@ -556,16 +581,12 @@ namespace TechMarketplace.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId1")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("WishLists");
                 });
@@ -732,13 +753,24 @@ namespace TechMarketplace.API.Migrations
 
             modelBuilder.Entity("TechMarketplace.API.Models.Products.ProductSpecification", b =>
                 {
-                    b.HasOne("TechMarketplace.API.Models.Products.ProductDetail", "ProductDetail")
+                    b.HasOne("TechMarketplace.API.Models.Products.SpecificationCategory", "SpecificationCategory")
                         .WithMany("Specifications")
-                        .HasForeignKey("ProductDetailId")
+                        .HasForeignKey("SpecificationCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ProductDetail");
+                    b.Navigation("SpecificationCategory");
+                });
+
+            modelBuilder.Entity("TechMarketplace.API.Models.Products.SpecificationCategory", b =>
+                {
+                    b.HasOne("TechMarketplace.API.Models.Products.ProductDetail", "productDetail")
+                        .WithMany("SpecificationCategories")
+                        .HasForeignKey("productDetailid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("productDetail");
                 });
 
             modelBuilder.Entity("TechMarketplace.API.Models.Reviews.Review", b =>
@@ -786,7 +818,7 @@ namespace TechMarketplace.API.Migrations
                 {
                     b.HasOne("TechMarketplace.API.Models.Users.User", "User")
                         .WithMany("WishList")
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -855,6 +887,11 @@ namespace TechMarketplace.API.Migrations
                 {
                     b.Navigation("Images");
 
+                    b.Navigation("SpecificationCategories");
+                });
+
+            modelBuilder.Entity("TechMarketplace.API.Models.Products.SpecificationCategory", b =>
+                {
                     b.Navigation("Specifications");
                 });
 

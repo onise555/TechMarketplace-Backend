@@ -3,5 +3,6 @@
     Pending,
     Paid,      
     Shipped,
+    Cancelled,
     Delivered
 }

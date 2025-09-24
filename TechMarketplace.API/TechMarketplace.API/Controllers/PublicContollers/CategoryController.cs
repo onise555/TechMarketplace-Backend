@@ -21,7 +21,7 @@ namespace TechMarketplace.API.Controllers.PublicContollers
             _Jwt = jwtServices;
             _emailSender = emailSender;
         }
-        [HttpGet    ("Get-All-Categorys")]
+        [HttpGet("Get-All-Categorys")]
         public ActionResult GetAllCategory()
         {
             var category=_data.Categories.Select(x=> new CategoryDtos

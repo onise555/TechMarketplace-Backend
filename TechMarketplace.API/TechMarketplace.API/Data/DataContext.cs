@@ -19,7 +19,8 @@ namespace TechMarketplace.API.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductDetail> ProductDetails { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
-        public DbSet<ProductSpecification> ProductSpecifications { get; set; }
+        public DbSet<ProductSpecification> ProductSpecification { get; set; }   
+        public DbSet<SpecificationCategory> SpecificationCategories { get; set; }   
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<Brand> Brands { get; set; }
@@ -36,7 +37,7 @@ namespace TechMarketplace.API.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TechMarket;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=MoviesDat;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
         }
 
         
@@ -57,15 +58,13 @@ namespace TechMarketplace.API.Data
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //SeedAdmin
-         
+            DbSeeder.Seed(modelBuilder);
 
-                DbSeeder.Seed(modelBuilder);
 
         }
 
 
-       
+
     }
 
 

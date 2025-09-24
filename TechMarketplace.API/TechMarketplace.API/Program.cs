@@ -8,12 +8,16 @@ using TechMarketplace.API.Data;
 using TechMarketplace.API.Services;
 using TechMarketplace.API.SMTP;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddHttpClient<PayPalService>();
+builder.Services.AddScoped<PayPalService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<JwtServices>();
@@ -103,19 +107,18 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles(); // wwwroot-ისთვის
 
-// თუ კონკრეტულად uploads ფოლდერი გინდა
+// uploads ფოლდერის direct მისამართი
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, "wwwroot/uploads")),
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads")),
     RequestPath = "/uploads"
 });
 
 
-
 app.UseCors();
-app.UseStaticFiles(); // ეს აუცილებელია wwwroot-ისთვის
+ // ეს აუცილებელია wwwroot-ისთვის
 
 
 

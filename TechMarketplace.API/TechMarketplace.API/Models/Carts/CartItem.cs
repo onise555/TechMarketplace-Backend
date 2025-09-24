@@ -15,9 +15,9 @@ namespace TechMarketplace.API.Models.Carts
 
         public Product Product { get; set; }
         public decimal Price { get; set; }
-        public int Quantity { get; set; }
+        public int Quantity { get; set; } = 1;
 
-        public decimal TotalPrice => Product.Price * Quantity;
+        public decimal TotalPrice => Price * Quantity;
         public DateTime CreatedAt { get; set; } 
 
     }
