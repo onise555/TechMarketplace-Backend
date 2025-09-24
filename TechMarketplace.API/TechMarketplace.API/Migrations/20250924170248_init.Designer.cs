@@ -12,8 +12,8 @@ using TechMarketplace.API.Data;
 namespace TechMarketplace.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250923234349_i")]
-    partial class i
+    [Migration("20250924170248_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -523,12 +523,12 @@ namespace TechMarketplace.API.Migrations
                         {
                             Id = 1,
                             Email = "tsotskhalashvili555@gmail.com",
-                            FirstName = "SuperAdmin",
+                            FirstName = "Anonymus",
                             IsActive = true,
                             IsVerified = true,
-                            LastName = "AD",
-                            Password = "$2a$11$4NvKTrHQXv6JhVzyapf75eeKWqBK5DWsp81chZkYSwIHyACRh6gLy",
-                            Role = 0,
+                            LastName = "secret",
+                            Password = "$2a$11$HgsxfSjf3RpVQ/EQZ5OM3OAKYrlDsSoG8a43CcPCNiweESP/5mpeG",
+                            Role = 3,
                             VerifyCode = "0000"
                         });
                 });

@@ -27,7 +27,6 @@ namespace TechMarketplace.API.Controllers.AdminControllers
 
         }
 
-
         [HttpPost("Add-Category")]
         public ActionResult AddCategory(CreateCatrgoryRequest request)
         {

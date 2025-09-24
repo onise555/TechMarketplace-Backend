@@ -92,6 +92,7 @@ namespace TechMarketplace.API.Controllers.UserController
         #endregion
 
 
+
         #region AccountStatus
         [HttpPost("Deactivate-User")]
         public ActionResult DeactiveUser()
@@ -118,31 +119,6 @@ namespace TechMarketplace.API.Controllers.UserController
             });
         }
 
-        // Delete User
-        [Authorize(Roles = "User")]
-        [HttpDelete("Delete-User/{id}")]
-        public ActionResult DeleteUser(int id)
-        {
-            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-            if (id != currentUserId)
-                return Forbid();
-
-            var user = _data.Users.FirstOrDefault(x => x.Id == id);
-
-            if (user == null)
-                return NotFound("User Not Founded");
-
-            _data.Users.Remove(user);
-            _data.SaveChanges();
-            _emailSender.SendMail(user.Email, "Account Deleted", $"Hello {user.FirstName}, your account has been deleted");
-
-            var userDto = new DeleteUserDtos
-            {
-                Id = user.Id,
-            };
-            return Ok(userDto);
-        }
         #endregion
 
 

@@ -189,7 +189,7 @@ namespace TechMarketplace.API.Controllers.UserController
             }
         }
 
-        // Payment Status შემოწმება
+     
         [HttpGet("payment-status/{orderId}")]
         public async Task<IActionResult> GetPaymentStatus(int orderId)
         {
@@ -220,33 +220,8 @@ namespace TechMarketplace.API.Controllers.UserController
             }
         }
 
-        // All Payments (Debug-ისთვის)
-        [HttpGet("all-payments")]
-        public async Task<IActionResult> GetAllPayments()
-        {
-            try
-            {
-                var payments = await _context.Payments
-                    .Select(p => new
-                    {
-                        paymentId = p.Id,
-                        orderId = p.OrderId,
-                        amount = p.Amount,
-                        status = p.Status.ToString(),
-                        transactionId = p.TransactionId,
-                        paymentMethod = p.PaymentMethod,
-                        createdAt = p.CreatedAt,
-                        paidAt = p.PaidAt
-                    })
-                    .ToListAsync();
+  
 
-                return Ok(new { payments = payments, count = payments.Count });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
 
         // Debug PayPal Response
         [HttpGet("debug-paypal/{paypalOrderId}")]

@@ -14,7 +14,7 @@ namespace TechMarketplace.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles="Admin")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class AdminController : ControllerBase
     {
         private readonly DataContext _data;
@@ -109,6 +109,39 @@ namespace TechMarketplace.API.Controllers
             return Ok(new { Message = "Manager created successfully", emailNormalized = user.Email });
         }
 
+
+        [HttpPut("Update-User/Role/{id}")]
+        public ActionResult UpdateRole(int id, UpdateUserRoleRequest req)
+        {
+   
+            var currentUserIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(currentUserIdClaim, out int currentUserId))
+                return Unauthorized("Invalid token");
+
+        
+            var currentUser = _data.Users.FirstOrDefault(u => u.Id == currentUserId);
+            var targetUser = _data.Users.FirstOrDefault(u => u.Id == id);
+
+            if (targetUser == null)
+                return BadRequest("User not found");
+
+            
+            if (!Enum.IsDefined(typeof(UserRole), req.Role))
+                return BadRequest("Invalid role");
+
+            if (currentUserId == id)
+                return Forbid("you can not change your role");
+
+            if (currentUser.Role == UserRole.Admin && targetUser.Role == UserRole.Admin)
+                return Forbid("you can not cange adin role");
+
+            targetUser.Role = req.Role;
+            _data.SaveChanges();
+
+            return Ok(new { Message = "Role updated successfully" });
+        }
+
+
         [HttpPut("Update-User/{id}")]
         public ActionResult UpdateUser(int id , UpdateUser req)
         {
@@ -132,27 +165,63 @@ namespace TechMarketplace.API.Controllers
             return Ok(new { Message = "User updated successfully" });
         }
 
-
-        [HttpDelete("Delete-User/{id}")]
-        public ActionResult DeleteUser(int id)
+        [HttpPost("Activate-User/{id}")]
+        public ActionResult ActivateUser(int id)
         {
+            var user = _data.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+                return BadRequest("User not found");
 
-            var user =_data.Users.FirstOrDefault(x=>x.Id == id);  
+        
+            if (user.Role == UserRole.Admin || user.Role == UserRole.SuperAdmin)
+                return Forbid("Cannot activate admin users");
 
-            if (user == null) return NotFound("User Not Founded");
+          
+            if (user.IsActive && user.IsVerified)
+                return BadRequest("User is already active and verified");
 
-            _data.Users.Remove(user);
+            user.IsActive = true;
+            user.IsVerified = true;
             _data.SaveChanges();
 
-            _emailSender.SendMail(user.Email,"Account Deleted",$"Hello {user.FirstName}, your account has been deleted by an administrator.");
-
-            var deleteDto = new DeleteUser
-            {
-                Id = user.Id,
-            };
-            return Ok(deleteDto);
+        
+          
+                _emailSender.SendMail(user.Email, "Account Activated",
+                    $"Hello {user.FirstName}, your account has been activated by an administrator.");
+        
+      
+            return Ok(new { Message = "User activated successfully" });
         }
 
+
         #endregion
+
+
+        [HttpGet("all-payments")]
+        public async Task<IActionResult> GetAllPayments()
+        {
+            try
+            {
+                var payments = await _data.Payments
+                    .Select(p => new
+                    {
+                        paymentId = p.Id,
+                        orderId = p.OrderId,
+                        amount = p.Amount,
+                        status = p.Status.ToString(),
+                        transactionId = p.TransactionId,
+                        paymentMethod = p.PaymentMethod,
+                        createdAt = p.CreatedAt,
+                        paidAt = p.PaidAt
+                    })
+                    .ToListAsync();
+
+                return Ok(new { payments = payments, count = payments.Count });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TechMarketplace.API.Migrations
 {
     /// <inheritdoc />
-    public partial class i : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -458,7 +458,7 @@ namespace TechMarketplace.API.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "FirstName", "IsActive", "IsVerified", "LastName", "Password", "Role", "VerifyCode", "VerifyCodeExpiresAt" },
-                values: new object[] { 1, "tsotskhalashvili555@gmail.com", "SuperAdmin", true, true, "AD", "$2a$11$4NvKTrHQXv6JhVzyapf75eeKWqBK5DWsp81chZkYSwIHyACRh6gLy", 0, "0000", null });
+                values: new object[] { 1, "tsotskhalashvili555@gmail.com", "Anonymus", true, true, "secret", "$2a$11$HgsxfSjf3RpVQ/EQZ5OM3OAKYrlDsSoG8a43CcPCNiweESP/5mpeG", 3, "0000", null });
 
             migrationBuilder.InsertData(
                 table: "UserDetails",

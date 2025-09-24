@@ -2,5 +2,6 @@
 {
     Admin,
     User,
-    Manager
+    Manager,
+    SuperAdmin
 }

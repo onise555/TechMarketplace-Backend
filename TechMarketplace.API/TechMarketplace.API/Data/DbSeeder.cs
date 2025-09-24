@@ -14,11 +14,11 @@ namespace TechMarketplace.API.Data
                 new User
                 {
                     Id = 1,
-                    FirstName = "SuperAdmin",
-                    LastName = "AD",
+                    FirstName = "Anonymus",
+                    LastName = "secret",
                     Email = "tsotskhalashvili555@gmail.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
-                    Role = UserRole.Admin,
+                    Password = BCrypt.Net.BCrypt.HashPassword("Anonymus@123"),
+                    Role = UserRole.SuperAdmin,
                     IsVerified = true,
                     VerifyCode = "0000",
                     IsActive = true,
