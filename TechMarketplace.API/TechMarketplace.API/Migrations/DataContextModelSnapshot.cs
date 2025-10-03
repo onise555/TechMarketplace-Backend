@@ -524,7 +524,7 @@ namespace TechMarketplace.API.Migrations
                             IsActive = true,
                             IsVerified = true,
                             LastName = "secret",
-                            Password = "$2a$11$HgsxfSjf3RpVQ/EQZ5OM3OAKYrlDsSoG8a43CcPCNiweESP/5mpeG",
+                            Password = "$2a$11$E59CEIuaJETWjLCbJPSPD.wgnaB6Igas/n2kv1UWZVJ8vC0S8hVsq",
                             Role = 3,
                             VerifyCode = "0000"
                         });

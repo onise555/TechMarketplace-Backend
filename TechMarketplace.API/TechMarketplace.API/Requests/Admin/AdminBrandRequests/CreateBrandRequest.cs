@@ -10,6 +10,6 @@ namespace TechMarketplace.API.Requests.Admin.AdminBrandRequests
 
         public IFormFile File { get; set; }
 
-        public DateTime CreatedAt { get; set; }
     }
 }
+    

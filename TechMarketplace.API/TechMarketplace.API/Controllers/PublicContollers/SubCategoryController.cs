@@ -26,21 +26,24 @@ namespace TechMarketplace.API.Controllers.PublicContollers
 
 
 
-        [HttpGet("Get-All-Subcategorys")]
-        public ActionResult GetAllSubCategorys()
+        [HttpGet("Get-All-Subcategorys/{categoryid}")]
+        public ActionResult GetAllSubCategorys(int categoryid)
         {
-            var subcategory=_data.SubCategories.Select(x=> new SubCategoryDtos
+             
+            var subcategory=_data.SubCategories.Where(x=>x.CategoryId == categoryid).
+                Select(x=> new SubCategoryDtos
             {
                 Id = x.Id,
                 Name = x.Name,  
-                Description = x.Description,    
+                Description = x.Description,  
+                
             }).ToList();
 
             return Ok(subcategory); 
         }
 
 
-        [HttpGet("Get-SubCategory-Products{id}")]
+        [HttpGet("Get-SubCategory-Products/{id}")]
         public ActionResult GetProduct(int id)
         {
             var subcategoryWithProducts = _data.SubCategories

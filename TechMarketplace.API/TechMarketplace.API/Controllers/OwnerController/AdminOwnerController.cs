@@ -61,7 +61,7 @@ namespace TechMarketplace.API.Controllers.OwnerController
                 {
                     Message = "Admin created successfully",
                     AdminId = admin.Id,
-                    Email = admin.Email
+                    admin.Email
                 });
             }
 
@@ -76,7 +76,7 @@ namespace TechMarketplace.API.Controllers.OwnerController
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 Email = u.Email,
-                Role = u.Role,
+                Role = u.Role.ToString(),
                 IsVerified = u.IsVerified,
                 IsActive = u.IsActive
             }).ToList();
@@ -132,17 +132,35 @@ namespace TechMarketplace.API.Controllers.OwnerController
             var totalUsers = _data.Users.Count();
             var activeUsers = _data.Users.Count(u => u.IsActive);
             var adminCount = _data.Users.Count(u => u.Role == UserRole.Admin);
+            var managerCount=_data.Users.Count(u=> u.Role == UserRole.Manager);
 
             return Ok(new
             {
                 TotalUsers = totalUsers,
                 ActiveUsers = activeUsers,
                 AdminCount = adminCount,
+                ManagerCount=managerCount,
                 SystemDate = DateTime.Now
+
             });
         }
 
+        [HttpGet("Get-CategorY-info")]
+        public ActionResult GetCategory()
+        {
+            var categorycount = _data.Categories.Count();
+            var totalSubCategory = _data.SubCategories.Count();
+            var totalProducts = _data.Products.Count();
 
+            return Ok(new
+            {
+                TotaAlCategory = categorycount,
+                TotalSubCategory = totalSubCategory,
+                TotalProducts = totalProducts,
+                SystemDate = DateTime.Now
+
+            });
+        }
 
     }
 }

@@ -116,28 +116,26 @@ namespace TechMarketplace.API.Controllers.Auth
 
         }
 
-        // Logs in the user and returns JWT token
+      
         [HttpPost("Login")]
         public ActionResult Login([FromBody] CreateLoginRequest req)
         {
-
-
             var user = _data.Users.FirstOrDefault(x => x.Email == req.Email);
 
             if (user == null)
-                return BadRequest("User not found");
+                return BadRequest("User not found");    
 
             if (!user.IsVerified)
                 return BadRequest("Please verify your email before logging in.");
 
-
+            if (!user.IsActive)
+                return BadRequest("User is deactivated"); 
 
             var isValid = BCrypt.Net.BCrypt.Verify(req.Password, user.Password);
             if (!isValid)
                 return BadRequest("Invalid password");
 
             var token = _Jwt.GenerateToken(user.Id, user.FirstName, new List<UserRole> { user.Role });
-
 
             return Ok(new
             {
@@ -152,6 +150,7 @@ namespace TechMarketplace.API.Controllers.Auth
                 }
             });
         }
+
         #endregion
 
 

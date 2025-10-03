@@ -26,8 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\uploads\" />
-    <Folder Include="wwwroot\uploads\products\" />
+    <Folder Include="wwwroot\uploads\brands\" />
+    <Folder Include="wwwroot\uploads\categorys\" />
+    <Folder Include="wwwroot\uploads\products\DetailImigs\" />
   </ItemGroup>
 
 </Project>

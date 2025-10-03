@@ -1,132 +1,125 @@
-﻿using FluentValidation;
-using FluentValidation.AspNetCore;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
-using TechMarketplace.API.Data;
-using TechMarketplace.API.Services;
-using TechMarketplace.API.SMTP;
+﻿    using FluentValidation;
+    using FluentValidation.AspNetCore;
+    using Microsoft.Extensions.FileProviders;
+    using Microsoft.IdentityModel.Tokens;
+    using Microsoft.OpenApi.Models;
+    using System.Text;
+    using TechMarketplace.API.Data;
+    using TechMarketplace.API.Services;
+    using TechMarketplace.API.SMTP;
 
 
-var builder = WebApplication.CreateBuilder(args);
+    var builder = WebApplication.CreateBuilder(args);
 
 
 
-builder.Services.AddControllers();
+    builder.Services.AddControllers();
 
-builder.Services.AddHttpClient<PayPalService>();
-builder.Services.AddScoped<PayPalService>();
+    builder.Services.AddHttpClient<PayPalService>();
+    builder.Services.AddScoped<PayPalService>();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<JwtServices>();
-builder.Services.AddDbContext<DataContext>();
-builder.Services.AddScoped<EmailSender>();
-//Add FluentValidation
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddScoped<JwtServices>();
+    builder.Services.AddDbContext<DataContext>();
+    builder.Services.AddScoped<EmailSender>();
+    //Add FluentValidation
 
-builder.Services.AddControllers()
-    .AddFluentValidation(config =>
-    {
-        config.AutomaticValidationEnabled = true;
-    });
-
-builder.Services.AddValidatorsFromAssemblyContaining<Program>();
-
-builder.Services.AddSwaggerGen(c =>
-{
-    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    {
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
-        Name = "Authorization",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-
-    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement {
+    builder.Services.AddControllers()
+        .AddFluentValidation(config =>
         {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            config.AutomaticValidationEnabled = true;
+        });
+
+    builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+        {
+            In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+            Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+            Name = "Authorization",
+            Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+            Scheme = "Bearer"
+        });
+
+        c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement {
             {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                new Microsoft.OpenApi.Models.OpenApiSecurityScheme
                 {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
+                    Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                    {
+                        Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
     });
-});
 
 
 
-//Jwt Token
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
-    {
-        var JwtSettings = builder.Configuration.GetSection("JwtSettings");
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    //Jwt Token
+    builder.Services.AddAuthentication("Bearer")
+        .AddJwtBearer("Bearer", options =>
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,    
-            ValidateIssuerSigningKey = true,    
-            ValidateLifetime = true,
+            var JwtSettings = builder.Configuration.GetSection("JwtSettings");
+            options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,    
+                ValidateIssuerSigningKey = true,    
+                ValidateLifetime = true,
 
-            ValidIssuer = JwtSettings["Issuer"],
-            ValidAudience = JwtSettings["Audience"],
+                ValidIssuer = JwtSettings["Issuer"],
+                ValidAudience = JwtSettings["Audience"],
 
-            IssuerSigningKey =new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSettings["Key"]))
+                IssuerSigningKey =new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSettings["Key"]))
 
 
 
            
 
-        };
-    });
+            };
+        });
 
-//Add Cors
+    //Add Cors
 
-builder.Services.AddCors(option =>
-{
-    option.AddDefaultPolicy(build =>
+    builder.Services.AddCors(option =>
     {
-        build.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        option.AddDefaultPolicy(build =>
+        {
+            build.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        });
     });
-});
 
 
-var app = builder.Build();
+    var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
 
+    app.UseHttpsRedirection();
 
-app.UseHttpsRedirection();
+    // CORS უნდა იყოს Static Files-მდე
+    app.UseCors();
 
-app.UseStaticFiles(); // wwwroot-ისთვის
-
-// uploads ფოლდერის direct მისამართი
+// Static Files
+app.UseStaticFiles(); // default -> wwwroot
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads")),
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads")),
     RequestPath = "/uploads"
-});
+}); 
 
+app.UseAuthentication();
+    app.UseAuthorization();
 
-app.UseCors();
- // ეს აუცილებელია wwwroot-ისთვის
-
-
-
-app.UseAuthentication();    
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-
-app.Run();
+    app.MapControllers();
+    app.Run();

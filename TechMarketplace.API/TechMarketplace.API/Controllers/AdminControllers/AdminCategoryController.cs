@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TechMarketplace.API.Data;
 using TechMarketplace.API.Dtos.Admin.AdminCategoryDtos;
 using TechMarketplace.API.Models.Brands;
 using TechMarketplace.API.Models.Category;
+using TechMarketplace.API.Models.Products;
 using TechMarketplace.API.Requests.Admin.AdminCategoryRequests;
+using TechMarketplace.API.Requests.Admin.AdminProductRequests;
 using TechMarketplace.API.Requests.Admin.AdminSubCategoryRequest;
 using TechMarketplace.API.Services;
 
@@ -27,8 +30,9 @@ namespace TechMarketplace.API.Controllers.AdminControllers
 
         }
 
+
         [HttpPost("Add-Category")]
-        public ActionResult AddCategory(CreateCatrgoryRequest request)
+        public async Task<ActionResult> AddCategory([FromForm] CreateCatrgoryRequest request)
         {
 
             if (request.File == null || request.File.Length == 0)
@@ -44,7 +48,7 @@ namespace TechMarketplace.API.Controllers.AdminControllers
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                request.File.CopyToAsync(stream);
+                await request.File.CopyToAsync(stream);
             }
 
             Category category = new Category()
@@ -65,7 +69,7 @@ namespace TechMarketplace.API.Controllers.AdminControllers
 
 
         [HttpPut("Update-Category/{id}")]
-        public ActionResult UpdateCategory(int id, UpdateCategoryRequest req)
+        public async Task<ActionResult> UpdateCategory([FromForm] int id, UpdateCategoryRequest req)
         {
 
             var category = _data.Categories.FirstOrDefault(c => c.Id == id);
@@ -84,7 +88,7 @@ namespace TechMarketplace.API.Controllers.AdminControllers
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    req.File.CopyToAsync(stream);
+                   await req.File.CopyToAsync(stream);
                 }
 
                 category.CateogryImgUrl = $"/uploads/products/{fileName}";

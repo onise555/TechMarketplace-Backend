@@ -30,7 +30,7 @@ namespace TechMarketplace.API.Controllers.AdminControllers
         }
 
         [HttpPost("Add-Product-Brand")]
-        public ActionResult AddBrand(CreateBrandRequest request)
+        public async Task<ActionResult> AddBrand([FromForm] CreateBrandRequest request)
         {
 
             if (request.File == null || request.File.Length == 0)
@@ -46,14 +46,13 @@ namespace TechMarketplace.API.Controllers.AdminControllers
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                request.File.CopyToAsync(stream);
+              await  request.File.CopyToAsync(stream);
             }
 
             Brand brand = new Brand()
             {
                 Name = request.Name,
                 Description = request.Description,
-                CreatedAt = DateTime.Now,
                 ImageUrl = $"/uploads/brands/{fileName}"
             };
 
@@ -63,8 +62,10 @@ namespace TechMarketplace.API.Controllers.AdminControllers
          return Ok(brand);
         }
 
+
+
         [HttpPut("Update-Product-Brand/{id}")]
-        public ActionResult UpdateBrand(int id, UpdateBrandRequest req)
+        public async Task<ActionResult> UpdateBrand([FromForm] int id, UpdateBrandRequest req)
         {
             var b = _data.Brands.FirstOrDefault(b => b.Id == id);
             if (b == null)
@@ -81,7 +82,7 @@ namespace TechMarketplace.API.Controllers.AdminControllers
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                  req.File.CopyToAsync(stream);
+                await  req.File.CopyToAsync(stream);
                 }
 
                 b.ImageUrl = $"/uploads/products/{fileName}";

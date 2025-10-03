@@ -35,14 +35,15 @@ namespace TechMarketplace.API.Controllers
         {
 
             var user = _data.Users
-                .Where(u=>u.IsActive && u.Role!=UserRole.Admin)
+                .Where(u=>u.IsActive && u.Role!=UserRole.Admin && u.Role!=UserRole.SuperAdmin)
+                
                 .Select(x => new UserDtos
                 {
                 Id = x.Id,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Email = x.Email,
-                Role = x.Role,
+                Role = x.Role.ToString(),
                 IsVerified = x.IsVerified,
                 IsActive = x.IsActive,
 
@@ -64,7 +65,7 @@ namespace TechMarketplace.API.Controllers
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Email = x.Email,
-                Role = x.Role,
+                Role = x.Role.ToString(),
                 IsVerified = x.IsVerified,
                 IsActive = x.IsActive,
 
@@ -194,6 +195,30 @@ namespace TechMarketplace.API.Controllers
         }
 
 
+        [HttpPost("Deactivate-User/{id}")]
+        public ActionResult DeactivateUser(int id)
+        {
+            var user = _data.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+                return BadRequest("User not found");
+
+        
+            if (user.Role == UserRole.SuperAdmin)
+                return BadRequest("Cannot deactivate admin users");
+
+            if (!user.IsActive)
+                return BadRequest("User is already deactivated");
+
+            user.IsActive = false;
+            _data.SaveChanges();
+
+            _emailSender.SendMail(user.Email, "Account Deactivated",
+                $"Hello {user.FirstName}, your account has been deactivated by an administrator.");
+
+            return Ok(new { Message = "User deactivated successfully" });
+        }
+
+
         #endregion
 
 
@@ -222,6 +247,12 @@ namespace TechMarketplace.API.Controllers
             {
                 return StatusCode(500, new { error = ex.Message });
             }
+
+
         }
+
+
+     
     }
+  
 }

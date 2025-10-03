@@ -51,7 +51,7 @@ namespace TechMarketplace.API.Controllers.UserController
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                Role = user.Role,
+                Role = user.Role.ToString(),
                 IsVerified = user.IsVerified,
                 IsActive = user.IsActive,
             };

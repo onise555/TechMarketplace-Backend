@@ -17,7 +17,6 @@ namespace TechMarketplace.API.Controllers.AdminControllers
     public class AdminProductImageController : ControllerBase
     {
 
-
         private readonly DataContext _data;
         private readonly EmailSender _emailSender;
 
@@ -25,11 +24,10 @@ namespace TechMarketplace.API.Controllers.AdminControllers
         {
             _data = data;
             _emailSender = emailSender;
-
         }
 
         [HttpPost("Product-Detail-Imgs")]
-        public ActionResult AddDetailImgs(CreateDetailImgRequest req)
+        public async Task<ActionResult> AddDetailImgs([FromForm] CreateDetailImgRequest req)
         {
             if (req.File == null || req.File.Length == 0)
                 return BadRequest("ფაილი არ აირჩიე");
@@ -41,16 +39,15 @@ namespace TechMarketplace.API.Controllers.AdminControllers
             var fileName = $"{Guid.NewGuid()}_{req.File.FileName}";
             var filePath = Path.Combine(uploadsFolder, fileName);
 
-
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                req.File.CopyToAsync(stream);
+                await req.File.CopyToAsync(stream);
             }
 
             ProductImage productImage = new ProductImage()
             {
                 ProductDetailId = req.ProductDetailId,
-                ImgUrl = $"wwwroot/uploads/products/DetailImigs{fileName}",
+                ImgUrl = $"/uploads/products/DetailImigs/{fileName}"  // ✅ სლეში დამატებულია
             };
 
             _data.ProductImages.Add(productImage);
@@ -58,23 +55,25 @@ namespace TechMarketplace.API.Controllers.AdminControllers
 
             var imageUrl = $"{Request.Scheme}://{Request.Host}{productImage.ImgUrl}";
 
-            return Ok(productImage);
-
-
-
+            return Ok(new
+            {
+                productImage.Id,
+                productImage.ProductDetailId,
+                ImgUrl = imageUrl
+            });
         }
 
-        [HttpPut("product-Deetai-img/{id}")]
-        public ActionResult UpdateDetailImgs(int id, UpdateDetailImgRequest req)
+        [HttpPut("product-Detail-img/{id}")]
+        public async Task<ActionResult> UpdateDetailImgs([FromRoute] int id, [FromForm] UpdateDetailImgRequest req)
         {
-            var DetailImg = _data.ProductImages.FirstOrDefault(c => c.Id == id);
+            var detailImg = _data.ProductImages.FirstOrDefault(c => c.Id == id);
 
-            if (DetailImg == null)
-                return NotFound("პროდუქტი ვერ მოიძებნა");
+            if (detailImg == null)
+                return NotFound("პროდუქტის სურათი ვერ მოიძებნა");
 
             if (req.File != null && req.File.Length > 0)
             {
-                var uploadsFolder = Path.Combine("wwwroot/uploads/products");
+                var uploadsFolder = Path.Combine("wwwroot/uploads/products/DetailImigs");
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
 
@@ -83,31 +82,29 @@ namespace TechMarketplace.API.Controllers.AdminControllers
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    req.File.CopyToAsync(stream);
+                    await req.File.CopyToAsync(stream);
                 }
 
-                DetailImg.ImgUrl = $"wwwroot/uploads/products/DetailImigs{fileName}";
+                detailImg.ImgUrl = $"/uploads/products/DetailImigs/{fileName}"; // ✅ სლეში დამატებულია
             }
 
-            DetailImg.ProductDetailId = id;
+            detailImg.ProductDetailId = req.ProductDetailId; // ✅ id-ს ნაცვლად req.ProductDetailId
 
             _data.SaveChanges();
 
-            var imageUrl = string.IsNullOrEmpty(DetailImg.ImgUrl)
-          ? null
-         : $"{Request.Scheme}://{Request.Host}{DetailImg.ImgUrl}";
+            var imageUrl = string.IsNullOrEmpty(detailImg.ImgUrl)
+                ? null
+                : $"{Request.Scheme}://{Request.Host}{detailImg.ImgUrl}";
 
-            var detailimgDto = new UpdateProductDetailImgDtos
+            var detailImgDto = new UpdateProductDetailImgDtos
             {
-                Id = id,
-                ProductDetailId = DetailImg.ProductDetailId,
-                ImgUrl = DetailImg.ImgUrl,
+                Id = detailImg.Id,
+                ProductDetailId = detailImg.ProductDetailId,
+                ImgUrl = imageUrl
             };
 
-            return Ok(detailimgDto);
-
+            return Ok(detailImgDto);
         }
-
 
         [HttpDelete("Delete-Product-DetailImg/{id}")]
         public ActionResult DeleteProductImg(int id)
@@ -115,20 +112,17 @@ namespace TechMarketplace.API.Controllers.AdminControllers
             var img = _data.ProductImages.FirstOrDefault(x => x.Id == id);
 
             if (img == null)
-            {
-                NotFound("Product Not Founded");
-            }
+                return NotFound("Product Not Found");
 
-            var DeleteDto = new DeleteProductDetaiImgDtos
+            var deleteDto = new DeleteProductDetaiImgDtos
             {
                 Id = id,
             };
 
-           _data.ProductImages.Remove(img); 
-           _data.SaveChanges();
-            
-            return Ok(DeleteDto);
-        }
+            _data.ProductImages.Remove(img);
+            _data.SaveChanges();
 
+            return Ok(deleteDto);
+        }
     }
 }

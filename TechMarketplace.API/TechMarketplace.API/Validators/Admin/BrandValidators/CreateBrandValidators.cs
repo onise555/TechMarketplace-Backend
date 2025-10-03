@@ -30,9 +30,6 @@ namespace TechMarketplace.API.Validators.Admin.BrandValidators
                     .WithMessage("File size cannot exceed 2MB.");
 
     
-            RuleFor(x => x.CreatedAt)
-                .NotEmpty().WithMessage("CreatedAt is required.")
-                .LessThanOrEqualTo(DateTime.Now).WithMessage("CreatedAt cannot be in the future.");
         }
     }  
     }
