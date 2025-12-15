@@ -7,7 +7,7 @@
 
 ---
 
-## 🎯 Project Scope
+##  Project Scope
 
 Development of a comprehensive, RESTful Backend API for a technical product e-commerce platform using .NET 8. The architecture is designed to handle complex business logic, authorization, and inventory management.
 
@@ -20,7 +20,7 @@ Development of a comprehensive, RESTful Backend API for a technical product e-co
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 | Category | Technology |
 | :--- | :--- |
@@ -35,7 +35,7 @@ Development of a comprehensive, RESTful Backend API for a technical product e-co
 
 ---
 
-## 👥 Access Roles and Responsibilities
+##  Access Roles and Responsibilities
 
 | Role | Core Controllers | Responsibilities (Highest to Lowest Access) |
 | :--- | :--- | :--- |
@@ -46,7 +46,7 @@ Development of a comprehensive, RESTful Backend API for a technical product e-co
 
 ---
 
-## 📊 API Endpoints Overview (by Controller Groups)
+##  API Endpoints Overview (by Controller Groups)
 
 The API utilizes a granular structure for clear separation of concerns, reflected in the controller naming (`AdminOwner`, `AdminProduct`, `UserCart`, etc.).
 
