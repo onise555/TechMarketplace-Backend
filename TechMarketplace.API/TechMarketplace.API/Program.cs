@@ -209,17 +209,17 @@ builder.Services.AddCors(option =>
 
 var app = builder.Build();
 
-// აი აქ დავაკომენტარეთ პირობა, რომ Swagger ყოველთვის გამოჩნდეს
- if (app.Environment.IsDevelopment())
- {
+
+// Swagger ყოველთვის ჩართული იქნება, მიუხედავად იმისა, დეველოპმენტში ხარ თუ არა
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    c.RoutePrefix = string.Empty; // ეს დასვამს Swagger-ს მთავარ გვერდზე
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TechMarketplace API V1");
+    c.RoutePrefix = string.Empty; // ეს ძალიან მნიშვნელოვანია! 404-ის ნაცვლად პირდაპირ Swagger-ს გახსნის
 });
- }
 
+app.UseHttpsRedirection();
+// დანარჩენი კოდი (Cors, Static Files, Auth და ა.შ.) დატოვე უცვლელი
 app.UseHttpsRedirection();
 app.UseCors();
 
