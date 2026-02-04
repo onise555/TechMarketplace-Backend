@@ -46,7 +46,7 @@ namespace TechMarketplace.API.Controllers.AdminControllers
                 Directory.CreateDirectory(uploadsFolder);
 
             var fileName = $"{Guid.NewGuid()}_{request.File.FileName}";
-            var filePath = Path.Combine(uploadsFolder, fileName);
+            var filePath = Path.Combine(uploadsFolder, fileName); 
 
 
             using (var stream = new FileStream(filePath, FileMode.Create))

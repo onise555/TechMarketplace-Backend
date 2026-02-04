@@ -38,7 +38,7 @@ namespace TechMarketplace.API.Controllers.Auth
             if (_data.Users.Any(u => u.Email.ToLower() == emailNormalized))
                 return BadRequest("Email is already in use");
 
-
+            
             var code = new Random().Next(100000, 1000000).ToString();
 
 
