@@ -37,10 +37,20 @@ namespace TechMarketplace.API.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=FinalTechMarket;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
-        }
+            var connString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
-        
+            if (string.IsNullOrEmpty(connString))
+            {
+                // 1. აქ ჩასვი ის DATABASE_PUBLIC_URL, რომელიც დააკოპირე
+                // 2. ბოლოში მიაწერე ?sslmode=require
+                optionsBuilder.UseNpgsql("Host=maglev.proxy.rlwy.net;Port=37200;Database=railway;Username=postgres;Password=gqXoDFDMBTMMUcTSjpPLfggGKpZXwUGL;SSL Mode=Require;Trust Server Certificate=true;");
+            }
+            else
+            {
+                // Railway-ზე გაშვებისას გამოიყენებს შიდა DATABASE_URL-ს
+                optionsBuilder.UseNpgsql(connString);
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
