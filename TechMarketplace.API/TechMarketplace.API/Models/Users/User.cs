@@ -9,7 +9,8 @@ namespace TechMarketplace.API.Models.Users
 {
     public class User
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }  
+
 
         public string FirstName { get; set; }
 
