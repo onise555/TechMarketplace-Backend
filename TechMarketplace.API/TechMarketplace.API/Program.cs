@@ -209,16 +209,16 @@ builder.Services.AddCors(option =>
 
 var app = builder.Build();
 
-//// აი აქ დავაკომენტარეთ პირობა, რომ Swagger ყოველთვის გამოჩნდეს
-//// if (app.Environment.IsDevelopment())
-//// {
-//app.UseSwagger();
-//app.UseSwaggerUI(c =>
-//{
-//    c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-//    c.RoutePrefix = string.Empty; // ეს დასვამს Swagger-ს მთავარ გვერდზე
-//});
-//// }
+// აი აქ დავაკომენტარეთ პირობა, რომ Swagger ყოველთვის გამოჩნდეს
+ if (app.Environment.IsDevelopment())
+ {
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    c.RoutePrefix = string.Empty; // ეს დასვამს Swagger-ს მთავარ გვერდზე
+});
+ }
 
 app.UseHttpsRedirection();
 app.UseCors();
