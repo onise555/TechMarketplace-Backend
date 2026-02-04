@@ -36,7 +36,7 @@ namespace TechMarketplace.API.SMTP
             // 1. ეს ხაზი აუცილებელია Railway/Linux-ისთვის SSL სერტიფიკატის ნდობისთვის
             ServicePointManager.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
-            using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587))
+            using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 465))
             {
                 smtpClient.EnableSsl = true;
                 smtpClient.UseDefaultCredentials = false;
