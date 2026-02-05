@@ -42,6 +42,9 @@ namespace TechMarketplace.API.SMTP
                 smtpClient.UseDefaultCredentials = false;
                 smtpClient.Credentials = new NetworkCredential("tsotskhalashvili558@gmail.com", "wfit myhi rnml nwmz");
 
+                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+
                 // 2. დავამატოთ თაიმაუტი (5 წამი), რომ Swagger არ გაიჭედოს უსასრულოდ
                 smtpClient.Timeout = 5000;
 
