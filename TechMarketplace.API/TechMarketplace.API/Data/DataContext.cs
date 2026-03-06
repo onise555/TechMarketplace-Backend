@@ -41,13 +41,12 @@ namespace TechMarketplace.API.Data
 
             if (string.IsNullOrEmpty(connString))
             {
-                // 1. აქ ჩასვი ის DATABASE_PUBLIC_URL, რომელიც დააკოპირე
-                // 2. ბოლოში მიაწერე ?sslmode=require
+         
                 optionsBuilder.UseNpgsql("Host=maglev.proxy.rlwy.net;Port=37200;Database=railway;Username=postgres;Password=gqXoDFDMBTMMUcTSjpPLfggGKpZXwUGL;SSL Mode=Require;Trust Server Certificate=true;");
             }
             else
             {
-                // Railway-ზე გაშვებისას გამოიყენებს შიდა DATABASE_URL-ს
+    
                 optionsBuilder.UseNpgsql(connString);
             }
         }
